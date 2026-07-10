@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Chat from "./pages/Chat";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
 
@@ -28,17 +28,29 @@ function App() {
 
             <Route
                 path="/dashboard"
-                element={<Dashboard />}
+                element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                    }
             />
 
             <Route
                 path="/chat/:companyId"
-                element={<Chat />}
+                element={
+                    <ProtectedRoute>
+                        <Chat />
+                    </ProtectedRoute>
+                }
             />
 
             <Route
                 path="/upload/:companyId"
-                element={<Upload />}
+                element={
+                    <ProtectedRoute>
+                        <Upload />
+                    </ProtectedRoute>
+                }
             />
 
         </Routes>
