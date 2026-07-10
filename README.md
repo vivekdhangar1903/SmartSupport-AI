@@ -1,53 +1,79 @@
-# SmartSupport AI
+# 🤖 SmartSupport AI
 
-SmartSupport AI is a multi-tenant AI customer support platform that allows companies to upload documents and create AI assistants powered by Retrieval Augmented Generation (RAG).
+AI powered customer support platform where companies can upload documents and create their own AI assistant.
 
-## Features
+## 🚀 Features
 
-- User Authentication with JWT
-- Secure Password Hashing
-- Company Workspace Management
-- Add Company Members
-- PDF Document Upload
-- Text Extraction
-- Vector Embeddings
-- ChromaDB Vector Database
-- RAG Based Question Answering
-- Local LLM Integration using Ollama
-- Llama 3.1 Support
-- Chat History Storage
+- User Authentication using JWT
+- Multi Company Workspace Support
+- PDF Knowledge Base Upload
+- AI Question Answering
+- Retrieval Augmented Generation (RAG)
+- Local LLM Support with Ollama
+- Chat History
+- Secure APIs
 
-## Tech Stack
+
+## 🛠 Tech Stack
+
+### Frontend
+- React
+- Tailwind CSS
+- Axios
 
 ### Backend
 - FastAPI
 - Python
 - MongoDB
-- ChromaDB
 
 ### AI
 - Ollama
-- Llama 3.1
+- Llama Model
+- ChromaDB
 - Sentence Transformers
-- RAG Architecture
-
-## Architecture
-
-User
-↓  
-FastAPI API
-↓  
-JWT Authentication
-↓  
-Company Workspace
-↓  
-Document Processing
-↓  
-ChromaDB Vector Search
-↓  
-Llama 3.1 AI Model
-↓  
-AI Response
 
 
-## Project Structure
+## 📸 Screenshots
+
+### Login
+
+![Login](screenshots/login.png)
+
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+
+### AI Chat
+
+![Chat](screenshots/chat.png)
+
+
+## 🧠 Architecture
+
+```text
+React Frontend
+
+      ↓
+
+FastAPI Backend
+
+      ↓
+
+----------------
+|              |
+MongoDB     ChromaDB
+
+               ↓
+
+          Ollama LLM
+
+               ↓
+
+        AI Response
+```
+
+## Status
+
+MVP Completed ✅
