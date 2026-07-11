@@ -53,6 +53,40 @@ function Documents(){
 
     },[companyId]);
 
+    async function deleteDocument(id){
+
+
+    const token =
+    localStorage.getItem("token");
+
+
+    await api.delete(
+
+        `/documents/delete/${id}`,
+
+        {
+            headers:{
+                Authorization:
+                `Bearer ${token}`
+            }
+        }
+
+    );
+
+
+    setDocuments(
+
+        documents.filter(
+
+            (doc)=>doc.id !== id
+
+        )
+
+    );
+
+
+}
+
 
 
     return (
@@ -94,6 +128,17 @@ function Documents(){
                                     📄 {doc.filename}
 
                                 </h2>
+
+                                <button
+                                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg"
+                                onClick={
+                                    ()=>{
+                                        deleteDocument(doc.id);
+                                    }
+                                }
+                                >
+                                    Delete
+                                </button>
 
 
 

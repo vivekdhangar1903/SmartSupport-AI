@@ -20,7 +20,8 @@ collection = client.get_or_create_collection(
 
 def store_document(
     text: str,
-    company_id: str
+    company_id: str,
+    document_id: str
 ):
 
     chunks = []
@@ -47,7 +48,7 @@ def store_document(
         collection.add(
 
             ids=[
-                f"{company_id}_{index}"
+                f"{document_id}_{index}"
             ],
 
             documents=[
@@ -60,7 +61,8 @@ def store_document(
 
             metadatas=[
                 {
-                    "company_id": company_id
+                    "company_id": company_id,
+                    "document_id": document_id
                 }
             ]
         )
@@ -105,3 +107,19 @@ def search_document(
 
 
     return documents[0]
+
+def delete_document_vectors(
+    document_id: str
+):
+
+
+    collection.delete(
+
+        where={
+            "document_id": document_id
+        }
+
+    )
+
+
+    return True

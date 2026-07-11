@@ -1,9 +1,13 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 from datetime import datetime
+from bson import ObjectId
 
 from services.security import verify_token
 from services.document_service import extract_pdf_text
-from services.rag_service import store_document
+from services.rag_service import (
+    store_document,
+    delete_document_vectors
+)
 
 from database import get_database
 
@@ -35,20 +39,12 @@ async def upload_document(
         )
 
 
-
     text = extract_pdf_text(
         file_path
     )
 
 
-    chunks = store_document(
-        text,
-        company_id
-    )
-
-
-
-    db.documents.insert_one(
+    document = db.documents.insert_one(
 
         {
             "company_id": company_id,
@@ -61,12 +57,25 @@ async def upload_document(
     )
 
 
+    document_id = str(
+        document.inserted_id
+    )
+
+
+    chunks = store_document(
+        text,
+        company_id,
+        document_id
+    )
+
 
     return {
 
         "filename": file.filename,
 
         "company_id": company_id,
+
+        "document_id": document_id,
 
         "chunks_created": chunks,
 
@@ -111,3 +120,36 @@ def list_documents(
 
 
     return result
+
+@router.delete("/delete/{document_id}")
+def delete_document(
+    document_id: str,
+    user=Depends(verify_token)
+):
+
+
+    result = db.documents.delete_one(
+        {
+            "_id": ObjectId(document_id)
+        }
+    )
+
+
+    if result.deleted_count == 0:
+
+        return {
+            "message":"Document not found"
+        }
+
+
+    delete_document_vectors(
+        document_id
+    )
+
+
+    return {
+
+        "message":
+        "Document deleted successfully"
+
+    }
