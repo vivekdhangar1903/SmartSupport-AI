@@ -1,13 +1,21 @@
 from fastapi import APIRouter, UploadFile, File, Depends
+from datetime import datetime
 
 from services.security import verify_token
 from services.document_service import extract_pdf_text
 from services.rag_service import store_document
 
+from database import get_database
+
+
 router = APIRouter(
     prefix="/documents",
     tags=["Documents"]
 )
+
+
+db = get_database()
+
 
 
 @router.post("/upload/{company_id}")
@@ -21,23 +29,85 @@ async def upload_document(
 
 
     with open(file_path, "wb") as f:
+
         f.write(
             await file.read()
         )
 
 
+
     text = extract_pdf_text(
         file_path
     )
+
+
     chunks = store_document(
-    text,
-    company_id
-)
+        text,
+        company_id
+    )
+
+
+
+    db.documents.insert_one(
+
+        {
+            "company_id": company_id,
+
+            "filename": file.filename,
+
+            "uploaded_at": datetime.utcnow()
+        }
+
+    )
+
 
 
     return {
-    "filename": file.filename,
-    "company_id": company_id,
-    "chunks_created": chunks,
-    "message": "Document stored in company AI memory"
-}
+
+        "filename": file.filename,
+
+        "company_id": company_id,
+
+        "chunks_created": chunks,
+
+        "message": "Document stored in company AI memory"
+
+    }
+
+
+
+
+
+@router.get("/list/{company_id}")
+def list_documents(
+    company_id: str,
+    user=Depends(verify_token)
+):
+
+
+    docs = db.documents.find(
+        {
+            "company_id": company_id
+        }
+    )
+
+
+    result = []
+
+
+    for doc in docs:
+
+        result.append(
+
+            {
+                "id": str(doc["_id"]),
+
+                "filename": doc["filename"],
+
+                "uploaded_at": doc["uploaded_at"]
+            }
+
+        )
+
+
+    return result

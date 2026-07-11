@@ -182,6 +182,17 @@ function Dashboard(){
 
                                     </button>
 
+                                    <button
+                                    className="border px-5 py-2 rounded-lg hover:bg-gray-100"
+                                    onClick={
+                                        ()=>
+                                        navigate(
+                                            `/documents/${company.company_id}`
+                                        )
+                                    }
+                                    >
+                                        📚 Documents
+                                    </button>
 
                                 </div>
 

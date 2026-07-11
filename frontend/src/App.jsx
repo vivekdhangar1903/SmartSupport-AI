@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Chat from "./pages/Chat";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Documents from "./pages/Documents";
 
 function App() {
 
@@ -49,6 +50,15 @@ function App() {
                 element={
                     <ProtectedRoute>
                         <Upload />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/documents/:companyId"
+                element={
+                    <ProtectedRoute>
+                        <Documents />
                     </ProtectedRoute>
                 }
             />
