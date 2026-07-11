@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 
@@ -17,17 +17,61 @@ function Chat(){
 
     const [loading, setLoading] = useState(false);
 
+    useEffect(()=>{
+
+
+    async function loadHistory(){
+
+
+        const token =
+        localStorage.getItem("token");
+
+
+        const response =
+        await api.get(
+
+            `/chat/history/${companyId}`,
+
+            {
+                headers:{
+                    Authorization:
+                    `Bearer ${token}`
+                }
+            }
+
+        );
+
+
+        setMessages(
+            response.data
+        );
+
+
+    }
+
+
+    loadHistory();
+
+},[companyId]);
+
 
 
     async function askAI(){
 
 
+    if(!question.trim()){
+        return;
+    }
+
+
+    try{
+
+
         setLoading(true);
 
 
-        const token = localStorage.getItem(
-            "token"
-        );
+        const token =
+        localStorage.getItem("token");
 
 
         const response = await api.post(
@@ -54,7 +98,6 @@ function Chat(){
 
                 {
                     question: question,
-
                     answer: response.data.answer
                 }
             ]
@@ -64,11 +107,27 @@ function Chat(){
         setQuestion("");
 
 
-        setLoading(false);
+    }
+
+
+    catch(error){
+
+
+        alert(
+            "AI response failed"
+        );
 
 
     }
 
+
+    finally{
+
+
+        setLoading(false);
+
+
+    }}
 
 
 

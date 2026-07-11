@@ -89,3 +89,34 @@ def ask_question(
 
         "answer": answer
     }
+
+@router.get("/history/{company_id}")
+def get_chat_history(
+    company_id: str,
+    user_email=Depends(verify_token)
+):
+
+
+    chats = db.chats.find(
+        {
+            "company_id": company_id,
+            "user": user_email
+        }
+    )
+
+
+    result = []
+
+
+    for chat in chats:
+
+        result.append(
+            {
+                "question": chat["question"],
+
+                "answer": chat["answer"]
+            }
+        )
+
+
+    return result
